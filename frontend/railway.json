@@ -1,0 +1,10 @@
+{
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "npm run build"
+  },
+  "deploy": {
+    "startCommand": "npx serve dist -s",
+    "restartPolicyType": "ON_FAILURE"
+  }
+}
