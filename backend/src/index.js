@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const { execSync } = require('child_process');
 
 const authRoutes = require('./routes/auth');
 const projectRoutes = require('./routes/projects');
@@ -8,6 +9,17 @@ const taskRoutes = require('./routes/tasks');
 const userRoutes = require('./routes/users');
 
 const app = express();
+
+// Run migrations on startup in production
+if (process.env.NODE_ENV === 'production') {
+  try {
+    console.log('Running database migrations...');
+    execSync('npx prisma migrate deploy', { stdio: 'inherit' });
+    console.log('Migrations complete.');
+  } catch (err) {
+    console.error('Migration failed:', err.message);
+  }
+}
 
 app.use(cors({
   origin: process.env.FRONTEND_URL || '*',
