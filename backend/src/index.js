@@ -17,12 +17,13 @@ if (process.env.NODE_ENV === 'production') {
     execSync('npx prisma migrate deploy', { stdio: 'inherit' });
     console.log('Migrations complete.');
   } catch (err) {
-    console.error('Migration failed:', err.message);
+    console.error('Migration failed (continuing anyway):', err.message);
   }
 }
 
+const allowedOrigin = (process.env.FRONTEND_URL || '').trim().replace(/\/$/, '');
 app.use(cors({
-  origin: process.env.FRONTEND_URL || '*',
+  origin: allowedOrigin || '*',
   credentials: true,
 }));
 app.use(express.json());
